@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API = axios.create({baseURL:"http://localhost:8000"});
+const API = axios.create({baseURL:"https://uzefa-server-2026.onrender.com"});
 
 export const createCard =(card)=>API.post("/api/v1/card",card)
 export const fetchCard=()=>API.get("/api/v1/card");

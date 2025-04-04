@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: "http://localhost:8000" });
+const API = axios.create({ baseURL: "https://uzefa-server-2026.onrender.com" });
 
 export const signup = (data) => API.post("/users/signup", data)
 export const signin = (data) => API.post("/users/signin", data)
