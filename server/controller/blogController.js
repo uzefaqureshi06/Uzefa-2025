@@ -1,5 +1,4 @@
 import blog from '../models/blog.js'
-import mongoose from 'mongoose';
 export const createBlog = async (req, res) => {
 
   try {

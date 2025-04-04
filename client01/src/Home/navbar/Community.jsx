@@ -9,7 +9,7 @@ const Community = () => {
   const navigate = useNavigate();
 
   const localData = JSON.parse(localStorage.getItem("profile")) || {};
-  const user = localData?.savedUser || {};  
+  const user = localData?.savedUser || {};
 
   const users = useSelector((state) => state.auth.users);
   const blogs = useSelector((state) => state.blog.authorBlogs);
@@ -27,30 +27,32 @@ const Community = () => {
   }, [dispatch, user?._id]);
 
   const handleClick = (userId) => {
-    navigate(`/profile/${userId}`);
+    navigate(`/userProfile/${userId}`);
   };
 
   return (
     <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-white mb-6 text-center">Our Community</h1>
+      <h1 className="text-3xl font-bold text-white mb-6 text-center">
+        Our Community
+      </h1>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full max-w-7xl">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full max-w-7xl mb-8">
         {users && users.length > 0 ? (
-          users.map((user) => (
+          users?.slice(0, 4).map((item) => (
             <div
-              key={user._id}
+              key={item._id}
               className="bg-black border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 
                         p-4 flex flex-col items-center text-center transition-all transform hover:bg-gray-900"
             >
               <img
                 className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                src={user.avatar || "https://via.placeholder.com/150"} 
-                alt={user.name}
+                src={item.avatar || "https://via.placeholder.com/150"}
+                alt={item.name}
               />
-              <h5 className="text-xl font-medium text-gray-200">{user.name}</h5>
-              <span className="text-sm text-gray-500">{user.email}</span>
+              <h5 className="text-xl font-medium text-gray-200">{item.name}</h5>
+              <span className="text-sm text-gray-500">{item.email}</span>
               <button
-                onClick={() => handleClick(user._id)}
+                onClick={() => handleClick(item._id)}
                 className="mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg 
                           hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
@@ -59,7 +61,9 @@ const Community = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500 text-center col-span-full">No users found.</p>
+          <p className="text-gray-500 text-center col-span-full">
+            No User found.
+          </p>
         )}
       </div>
     </div>

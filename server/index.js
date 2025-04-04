@@ -10,8 +10,8 @@ import { blogRouter } from './routes/blog.js';
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json({ limit: "50mb" })); // Increase JSON body size limit
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // Increase URL-encoded body size limit
+app.use(bodyParser.json({ limit: "30mb" })); // Increase JSON body size limit
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true })); // Increase URL-encoded body size limit
 
 // Routes
 app.use('/api/v1/category', categoryRouter);

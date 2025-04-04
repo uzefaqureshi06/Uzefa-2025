@@ -7,8 +7,8 @@ export function Navbar() {
   const menuRef = useRef(null);
 
   const localData = JSON.parse(localStorage.getItem("profile"));
-  console.log(localData,"This is local Data")
-  console.log(localData?.user?.avatar,"This is local Data image")
+  // console.log(localData,"This is local Data")
+  // console.log(localData?.user?.avatar,"This is local Data image")
   const isLoggedIn = localData?.user;
 
   const handleAuthAction = () => {
