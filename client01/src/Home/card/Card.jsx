@@ -1,74 +1,113 @@
-import React, { useEffect } from 'react';
-import './Card.css';
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCard } from '../../redux/action/card';
+import { getAllBlogs } from "../../redux/action/blog";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Card = () => {
+// const categories = [
+//   "All", "Travel", "Cooking", "Business", "Science", 
+//   "Bitcoin", "GYM", "Entertainment", "Health", "DIY", "Technology"
+// ];
+
+const CardList = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cards = useSelector((state) => state.card);
+  const blogs = useSelector((state) => state.blog.blogs);
+
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    dispatch(getAllCard());
+    dispatch(getAllBlogs()); // Fetch blogs once when component mounts
   }, [dispatch]);
 
+  useEffect(() => {
+    const category = queryParams.get("category") || "All";
+    setSelectedCategory(category);
+
+    // Only filter when blogs exist
+    if (blogs.length > 0) {
+      if (category === "All") {
+        setFilteredData(blogs);  // Show all blogs when "All" is selected
+      } else {
+        const filtered = blogs.filter(
+          (item) => item.category.toLowerCase() === category.toLowerCase()
+        );
+        setFilteredData(filtered);
+      }
+    }
+  }, [blogs, search]); // Ensure it only runs when blogs or URL search params change
+
+  const handleClick = (id) => {
+    navigate(`/blog/${id}`);
+  };
+
   return (
-    <div className="flex flex-wrap justify-center gap-6 p-4">
-      {cards?.length > 0 ? (
-        cards.map((card) => (
-          <div 
-            key={card._id} 
-            className=" bg-black text-white rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 max-w-sm mx-auto p-4"
-           t
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* 🔹 Category Tabs */}
+      {/* <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+        {categories.map((cat) => (
+          <button 
+            key={cat} 
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-4 py-2 md:px-5 md:py-3 rounded-lg font-semibold transition-all duration-300 
+              ${selectedCategory === cat ? "bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg transform scale-105" : "bg-gray-800 hover:bg-gray-700"}
+              text-white`}
           >
-            {/* Profile & Timestamp */}
-            <header className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&w=1480&q=80"
-                  className="w-10 h-10 rounded-full mr-3"
-                  alt="Profile"
+            {cat}
+          </button>
+        ))}
+      </div> */}
+
+      {/* 🔹 Blog Cards (Filtered Data) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredData.length > 0 ? (
+          filteredData.map((blog) => (
+            <div 
+              key={blog._id} 
+              onClick={() => handleClick(blog._id)}
+              className="bg-gray-900 p-5 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all duration-300 transform cursor-pointer"
+            >
+              {/* ✅ User Avatar & Name */}
+              <div className="flex items-center space-x-3">
+                <img 
+                  src={blog.auth?.avatar || `https://ui-avatars.com/api/?name=${blog.auth?.name || "User"}&background=random`} 
+                  alt="User Avatar" 
+                  className="w-10 h-10 rounded-full border border-gray-500 shadow-md"
                 />
-                <p className="text-white text-sm">7 months ago</p>
+                <span className="text-white text-lg font-semibold">{blog.auth?.name || "User"}</span>
+                <div className="ml-auto">
+                  <button className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-transparent bg-gray-900 shadow-md transition-all duration-300 
+                    hover:scale-110 hover:border-blue-500 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500">
+                    <i className="bx bxs-right-arrow-circle text-white text-xl"></i>
+                  </button>
+                </div>
               </div>
-              <a href="#" className="cursor-pointer">
-              <a href="#" className="cursor-pointer">
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    style={{ fill: "rgba(255, 255, 255, 1)", transform: "", msFilter: "" }} // ✅ Fixed
-  >
-    <path d="M5.5 15a3.51 3.51 0 0 0 2.36-.93l6.26 3.58a3.06 3.06 0 0 0-.12.85 3.53 3.53 0 1 0 1.14-2.57l-6.26-3.58a2.74 2.74 0 0 0 .12-.76l6.15-3.52A3.49 3.49 0 1 0 14 5.5a3.35 3.35 0 0 0 .12.85L8.43 9.6A3.5 3.5 0 1 0 5.5 15zm12 2a1.5 1.5 0 1 1-1.5 1.5 1.5 1.5 0 0 1 1.5-1.5zm0-13A1.5 1.5 0 1 1 16 5.5 1.5 1.5 0 0 1 17.5 4zm-12 6A1.5 1.5 0 1 1 4 11.5 1.5 1.5 0 0 1 5.5 10z"></path>
-  </svg>
-</a>
 
-              </a>
-            </header>
-
-            {/* Main Image with Border Radius */}
-            <div className="mt-3">
-              <img
-                src={card.imageUrl || "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg"}
-                className="w-full rounded-lg"
-                alt="Card"
+              {/* Blog Image */}
+              <img 
+                src={blog.image || "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg"} 
+                alt={blog.title} 
+                className="w-full h-52 rounded-lg object-cover mt-4"
               />
-            </div>
 
-            {/* Title & Description */}
-            <div className="mt-3">
-              <h3 className="text-lg font-bold">{card.title}</h3>
-              <p className="text-white text-sm line-clamp-2">
-                {card.description}
+              {/* Blog Content */}
+              <h2 className="text-xl font-semibold mt-4 text-white line-clamp-2">
+                {blog.title}
+              </h2>
+              <p className="mt-2 text-gray-400 text-md line-clamp-3">
+                {blog.content}
               </p>
             </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-white text-lg">Loading cards...</p>
-      )}
+          ))
+        ) : (
+          <p className="text-gray-400 text-xl text-center">No blogs found in this category...</p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Card;
+export default CardList;

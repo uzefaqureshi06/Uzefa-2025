@@ -1,5 +1,5 @@
 import * as api from '../api/category.js'
-import { CREATE_USER, DELETE_USER, FETCH_ALL_CATEGORY, FETCH_ALL_USER, UPDATE_USER } from '../constants/actionTypes.js';
+import { CREATE_USER, DELETE_USER, FETCH_ALL_CATEGORY, FETCH_ALL_USER, FETCH_CATEGORY_ID, UPDATE_USER } from '../constants/actionTypes.js';
 
 // export const createUser =(name,email,password)=> async(dispatch) =>{
 //     try {
@@ -17,6 +17,17 @@ export const getAllCategory = () => async (dispatch) => {
         console.log("Error fetching categories:", error);
     }
 };
+
+export const getCategoryId =(id)=> async(dispatch)=>{
+try {
+    const{data} =await api.getCategoryId(id);
+    dispatch({type:FETCH_CATEGORY_ID,payload:data})
+} catch (error) {
+    console.log(error)
+}
+}
+
+
 
 
 // export const deleteUser=(id)=>async(dispatch)=>{

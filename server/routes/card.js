@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCard, deleteCard, getAllCard } from '../controller/cardController.js';
+import { createCard, deleteCard, getAllCard,  } from '../controller/cardController.js';
 export const cardRouter =express.Router();
 
 cardRouter.post('/',createCard)
